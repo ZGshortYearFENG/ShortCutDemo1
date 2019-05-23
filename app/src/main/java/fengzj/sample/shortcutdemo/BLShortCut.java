@@ -12,6 +12,8 @@ import android.graphics.drawable.Icon;
 import android.os.Build;
 import android.os.Parcelable;
 
+import java.util.List;
+
 public class BLShortCut {
 
     private static final String ACTION_INSTALL_SHORTCUT = "com.android.launcher.action.INSTALL_SHORTCUT";
@@ -109,6 +111,26 @@ public class BLShortCut {
             return false;
         }
 
+    }
+
+    /**
+     * AndroidO ShortCutManager判断快捷方式是否重复添加
+     * @param context
+     * @param mPinShortcutId
+     * @return
+     */
+    public static boolean isShortCutExistWithShortCutManager(Context context, String mPinShortcutId) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            ShortcutManager shortcutManager = context.getSystemService(ShortcutManager.class);
+            List<ShortcutInfo> infos = shortcutManager.getPinnedShortcuts();
+            for (int i = 0; i < infos.size(); i++) {
+                ShortcutInfo info = infos.get(i);
+                if (info.getId().equals(mPinShortcutId)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     public static void setActivityEnable(Context context, String clsName, boolean enable) {

@@ -25,50 +25,17 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.button1).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(BLShortCut.isShortCutExistWithShortCutManager(MainActivity.this, "pinned-shortcut")){
+                    Toast.makeText(MainActivity.this, "app快捷方式重复创建", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(BLShortCut.createAppShortcut(MainActivity.this, SecondActivity.class, getResources().getString(R.string.app_name), R.mipmap.ic_launcher)){
 
-                if(ContextCompat.checkSelfPermission(MainActivity.this, "net.oneplus.launcher.permission.READ_SETTINGS")
-                        != PackageManager.PERMISSION_GRANTED) {
+                    // 自动添加弹窗 跟 下面Toast同时发出
 
-                    AndPermission.with(MainActivity.this)
-                            .runtime()
-                            .permission(new String[] {"net.oneplus.launcher.permission.READ_SETTINGS", "net.oneplus.launcher.permission.WRITE_SETTINGS"})
-                            .onGranted(new Action<List<String>>() {
-                                @Override
-                                public void onAction(List<String> data) {
-                                    Log.d("fzj", "if 权限申请好了");
-                                    if (ShortCutUtil.isShortCutExist(MainActivity.this, "ShortCutDemo快捷方式")) {
-                                        Log.d("fzj", "ShortCut重复创建");
-                                        return;
-                                    }
-                                    if (BLShortCut.createAppShortcut(MainActivity.this, MainActivity.class.getName(), "ShortCutDemo快捷方式", 1)) {
-                                        Toast.makeText(MainActivity.this, "创建快捷方式成功", Toast.LENGTH_SHORT).show();
-                                        Log.d("fzj", "ShortCut创建成功");
-                                    } else {
-                                        Toast.makeText(MainActivity.this, "Failure", Toast.LENGTH_SHORT).show();
-                                        Log.d("fzj", "ShortCut创建失败");
-                                    }
-                                }
-                            })
-                            .onDenied(new Action<List<String>>() {
-                                @Override
-                                public void onAction(List<String> data) {
-                                    Log.d("fzj", "权限没申请下来");
-                                }
-                            })
-                            .start();
+                    Toast.makeText(MainActivity.this, "快捷方式创建成功", Toast.LENGTH_SHORT).show();
                 } else {
-                    Log.d("fzj", "else 权限申请好了");
-                    if (ShortCutUtil.isShortCutExist(MainActivity.this, "ShortCutDemo快捷方式")) {
-                        Log.d("fzj", "ShortCut重复创建");
-                        return;
-                    }
-                    if (BLShortCut.createAppShortcut(MainActivity.this, MainActivity.class.getName(), "ShortCutDemo快捷方式", 1)) {
-                        Toast.makeText(MainActivity.this, "创建快捷方式成功", Toast.LENGTH_SHORT).show();
-                        Log.d("fzj", "ShortCut创建成功");
-                    } else {
-                        Toast.makeText(MainActivity.this, "Failure", Toast.LENGTH_SHORT).show();
-                        Log.d("fzj", "ShortCut创建失败");
-                    }
+                    Toast.makeText(MainActivity.this, "尝试创建快捷方式，可能失败", Toast.LENGTH_SHORT).show();
                 }
             }
         });
