@@ -9,9 +9,12 @@ import android.content.pm.ShortcutInfo;
 import android.content.pm.ShortcutManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Icon;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Parcelable;
+import android.support.annotation.RequiresApi;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class BLShortCut {
@@ -148,6 +151,21 @@ public class BLShortCut {
         } catch (Exception e) {
 //            BLLog.e(e);
         }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N_MR1)
+    public static void createDynamicShortCuts(Context context){
+        ShortcutManager shortcutManager = context.getSystemService(ShortcutManager.class);
+
+        ShortcutInfo shortcut = new ShortcutInfo.Builder(context, "id1")
+                .setShortLabel("Website")
+                .setLongLabel("Open the website")
+                .setIcon(Icon.createWithResource(context, R.drawable.ic_launcher_background))
+                .setIntent(new Intent(Intent.ACTION_VIEW,
+                        Uri.parse("https://www.mysite.example.com/")))
+                .build();
+
+        shortcutManager.setDynamicShortcuts(Arrays.asList(shortcut));
     }
 
 }

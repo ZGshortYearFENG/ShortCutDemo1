@@ -2,6 +2,8 @@ package fengzj.sample.shortcutdemo;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -44,6 +46,13 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 // 多Launcher方式
                 BLShortCut.setActivityEnable(MainActivity.this, SecondActivity.class.getName(), true);
+            }
+        });
+        findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N_MR1)
+            @Override
+            public void onClick(View view) {
+                BLShortCut.createDynamicShortCuts(MainActivity.this);
             }
         });
     }
